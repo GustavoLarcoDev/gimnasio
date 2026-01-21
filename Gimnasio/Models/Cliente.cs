@@ -1,22 +1,40 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
 namespace Gimnasio.Models;
 
 public class Cliente
 {
     [Key]
-    public int Id { get; set; }
-    [Required(ErrorMessage = "El campo Nombre es obligatorio")]
+    public Guid ClienteId { get; set; }
+    
+    [Required]
+    public Guid GimnasioId { get; set; }
+
+    [Required]
     [StringLength(100)]
     public string Nombre { get; set; }
-    [StringLength(100)]
-    [Required (ErrorMessage = "El campo Apellido es obligatorio")]
-    public string Apellido { get; set; }
-    [Required(ErrorMessage = "La Fecha de nacimiento es obligatoria para validar que sea mayor de 16")]
-    public DateTime FechaNacimiento { get; set; }
-    public string? Email { get; set; }
+
     [Required]
+    [StringLength(100)]
+    public string Apellido { get; set; }
+
+    [EmailAddress]
+    public string? Email { get; set; }
+
     [Phone]
-    public string Telefono { get; set; }
-    public string Direccion { get; set; }
-    
+    public string? Telefono { get; set; }
+
+    public string? Direccion { get; set; }
+
+    public bool EsDiario { get; set; }
+
+    public DateTime FechaDeCreacion { get; set; } = DateTime.Now;
+    public DateTime FechaDeActualizacion { get; set; }
+
+    public DateTime FechaQueTermina { get; set; }
+
+    public int Dias { get; set; }
+    public decimal Precio { get; set; }
 }

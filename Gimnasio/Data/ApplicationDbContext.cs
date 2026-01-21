@@ -9,5 +9,5 @@ public class ApplicationDbContext : DbContext
     }
     // Here we add the DbSet later
     public DbSet<Cliente>  Clientes { get; set; }
-    
+    public DbSet<Gym> Gimnasios { get; set; }
 }
