@@ -16,4 +16,8 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Gimnasios\Index.cshtml" />
+    </ItemGroup>
+
 </Project>

@@ -4,15 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gimnasio.Controllers;
-public class ClientesController : Controller
+public class GimnasiosController : Controller
 {
     private readonly ApplicationDbContext _context;
-    public ClientesController(ApplicationDbContext context)
+    public GimnasiosController(ApplicationDbContext context)
     {
         _context = context;
     }
     [HttpGet]
-    [Route("/clientes")]
+    [Route("/gimnasios")]
     public async Task <IActionResult>  Index()
     {
         return View();
@@ -20,7 +20,7 @@ public class ClientesController : Controller
     [HttpGet]
     public async Task<IActionResult> GetClientes()
     {
-        var cliente = _context.Clientes.ToListAsync();
-        return Json(await cliente);
+        var gimnasio = _context.Gimnasios.ToListAsync();
+        return Json(await gimnasio);
     }
 }
