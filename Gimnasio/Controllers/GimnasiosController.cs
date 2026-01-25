@@ -339,6 +339,7 @@ namespace Gimnasio.Controllers
         {
             try 
             {
+                
                 if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
                 {
                     ViewBag.Error = "Email y contraseña son obligatorios";

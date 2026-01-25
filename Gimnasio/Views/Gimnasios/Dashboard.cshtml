@@ -1,8 +1,8 @@
 @model Gimnasio.Models.Gym
 
 @{
-    ViewData["Title"] = "Dashboard - " + Model.GimnasioNombre;
-    var gimnasioId = Model.GimnasioId;
+ViewData["Title"] = "Dashboard - " + Model.GimnasioNombre;
+var gimnasioId = Model.GimnasioId;
 }
 
 <!-- Toolbar -->
@@ -174,14 +174,14 @@
             <div class="card-body pt-0">
                 <table id="clientesTable" class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
                     <thead>
-                        <tr class="fw-bold text-muted">
-                            <th class="min-w-150px">Cliente</th>
-                            <th class="min-w-120px">Contacto</th>
-                            <th class="min-w-100px">Membresía</th>
-                            <th class="min-w-100px">Vencimiento</th>
-                            <th class="min-w-80px">Estado</th>
-                            <th class="min-w-100px text-end">Acciones</th>
-                        </tr>
+                    <tr class="fw-bold text-muted">
+                        <th class="min-w-150px">Cliente</th>
+                        <th class="min-w-120px">Contacto</th>
+                        <th class="min-w-100px">Membresía</th>
+                        <th class="min-w-100px">Vencimiento</th>
+                        <th class="min-w-80px">Estado</th>
+                        <th class="min-w-100px text-end">Acciones</th>
+                    </tr>
                     </thead>
                     <tbody class="text-gray-600 fw-semibold">
                     </tbody>
@@ -387,7 +387,7 @@
                 dataSrc: ''
             },
             columns: [
-                { 
+                {
                     data: null,
                     render: function(data, type, row) {
                         return `
@@ -405,7 +405,7 @@
                         `;
                     }
                 },
-                { 
+                {
                     data: null,
                     render: function(data, type, row) {
                         return `
@@ -416,7 +416,7 @@
                         `;
                     }
                 },
-                { 
+                {
                     data: null,
                     render: function(data, type, row) {
                         const tipo = row.esDiario ? '<span class="badge badge-light-info">Diario</span>' : '<span class="badge badge-light-primary">Regular</span>';
@@ -428,7 +428,7 @@
                         `;
                     }
                 },
-                { 
+                {
                     data: 'fechaQueTermina',
                     render: function(data, type, row) {
                         const fecha = new Date(data).toLocaleDateString('es-MX');
@@ -448,11 +448,11 @@
                         `;
                     }
                 },
-                { 
+                {
                     data: 'estaActivo',
                     render: function(data) {
-                        return data 
-                            ? '<span class="badge badge-light-success">Activo</span>' 
+                        return data
+                            ? '<span class="badge badge-light-success">Activo</span>'
                             : '<span class="badge badge-light-danger">Vencido</span>';
                     }
                 },
@@ -533,7 +533,7 @@
             success: function (data) {
                 modoEdicion = true;
                 $('#modalTitle').text('Editar Cliente');
-                
+
                 $('#clienteId').val(data.clienteId);
                 $('#nombre').val(data.nombre);
                 $('#apellido').val(data.apellido);
@@ -543,7 +543,7 @@
                 $('#dias').val(data.dias);
                 $('#precio').val(data.precio);
                 $('#esDiario').prop('checked', data.esDiario);
-                
+
                 $('#clienteModal').modal('show');
             },
             error: function () {
@@ -596,8 +596,8 @@
         $.ajax({
             url: '/Gimnasios/RenovarCliente',
             type: 'POST',
-            data: { 
-                id: id, 
+            data: {
+                id: id,
                 gimnasioId: gimnasioId,
                 dias: dias,
                 precio: precio
@@ -622,64 +622,84 @@
         window.location.href = '/Gimnasios/ExportClientesExcel?gimnasioId=' + gimnasioId;
     });
 
-    </script>
-
-    <style>
-        .bg-light-primary { background-color: rgba(13, 110, 253, 0.1); }
-        .bg-light-success { background-color: rgba(25, 135, 84, 0.1); }
-        .bg-light-warning { background-color: rgba(255, 193, 7, 0.1); }
-        .bg-light-info { background-color: rgba(13, 202, 240, 0.1); }
-        .bg-light-danger { background-color: rgba(220, 53, 69, 0.1); }
-        
-        .badge-light-primary { background-color: rgba(13, 110, 253, 0.1); color: #0d6efd; }
-        .badge-light-success { background-color: rgba(25, 135, 84, 0.1); color: #198754; }
-        .badge-light-warning { background-color: rgba(255, 193, 7, 0.1); color: #ffc107; }
-        .badge-light-info { background-color: rgba(13, 202, 240, 0.1); color: #0dcaf0; }
-        .badge-light-danger { background-color: rgba(220, 53, 69, 0.1); color: #dc3545; }
-
-        .required:after { content: " *"; color: #dc3545; }
-
-        .symbol {
-            display: inline-flex;
-            flex-shrink: 0;
-            position: relative;
-            border-radius: 0.475rem;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .symbol-40px { width: 40px; height: 40px; }
-        .symbol-50px { width: 50px; height: 50px; }
-
-        .symbol-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        .fs-7 { font-size: 0.85rem; }
-        .fs-8 { font-size: 0.75rem; }
-
-        .btn-icon {
-            width: 35px;
-            height: 35px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 0.475rem;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            transition: background-color 0.3s ease;
-        }
-
-        .form-check-custom .form-check-input {
-            width: 2.75rem;
-            height: 1.5rem;
-        }
-
-        .fs-2x { font-size: 2rem; }
-</style>
+</script>
 }
+
+<style>
+    .bg-light-primary { background-color: rgba(13, 110, 253, 0.1); }
+    .bg-light-success { background-color: rgba(25, 135, 84, 0.1); }
+    .bg-light-warning { background-color: rgba(255, 193, 7, 0.1); }
+    .bg-light-info { background-color: rgba(13, 202, 240, 0.1); }
+    .bg-light-danger { background-color: rgba(220, 53, 69, 0.1); }
+
+    .badge-light-primary { background-color: rgba(13, 110, 253, 0.1); color: #0d6efd; }
+    .badge-light-success { background-color: rgba(25, 135, 84, 0.1); color: #198754; }
+    .badge-light-warning { background-color: rgba(255, 193, 7, 0.1); color: #ffc107; }
+    .badge-light-info { background-color: rgba(13, 202, 240, 0.1); color: #0dcaf0; }
+    .badge-light-danger { background-color: rgba(220, 53, 69, 0.1); color: #dc3545; }
+
+    .required:after {
+        content: " *";
+        color: #dc3545;
+    }
+
+    /* Symbols (Metronic-style) */
+    .symbol {
+        display: inline-flex;
+        flex-shrink: 0;
+        position: relative;
+        border-radius: 0.475rem;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .symbol-40px { width: 40px; height: 40px; }
+    .symbol-50px { width: 50px; height: 50px; }
+
+    .symbol-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Font sizes */
+    .fs-7 { font-size: 0.85rem; }
+    .fs-8 { font-size: 0.75rem; }
+
+    /* Icon buttons */
+    .btn-icon {
+        width: 35px;
+        height: 35px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Tables */
+    #clientesTable tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.025);
+    }
+
+    /* Modals */
+    .modal-content {
+        border-radius: 0.75rem;
+    }
+
+    .modal-header,
+    .modal-footer {
+        border: none;
+    }
+
+    /* Scroll container */
+    #proximosVencerContainer::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #proximosVencerContainer::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.15);
+        border-radius: 3px;
+    }
+</style>
