@@ -2,7 +2,7 @@
     ViewData["Title"] = "Crear Gimnasio";
 }
 
-<div class="container-fluid px-5">
+<div class="container-fluid px-5 mb-5 pb-5">
     
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-5">
@@ -68,24 +68,28 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <div class="form-check form-switch form-check-custom">
-                                    <input class="form-check-input" type="checkbox" name="isActive" id="isActive" checked />
-                                    <label class="form-check-label fw-semibold" for="isActive">
-                                        Estado Activo
-                                    </label>
+                            <div class="col-12 mb-4">
+                                <label class="form-label fw-semibold required">Tipo de Gimnasio</label>
+                                <div class="d-flex gap-4 mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tipoGimnasio" 
+                                               id="tipoPago" value="pago" checked />
+                                        <label class="form-check-label fw-semibold" for="tipoPago">
+                                            <i class="bi bi-credit-card text-primary me-2"></i>
+                                            Gimnasio de Pago (Activo)
+                                        </label>
+                                        <div class="form-text">El gimnasio realizará pagos regulares</div>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tipoGimnasio" 
+                                               id="tipoPrueba" value="prueba" />
+                                        <label class="form-check-label fw-semibold" for="tipoPrueba">
+                                            <i class="bi bi-clock-history text-warning me-2"></i>
+                                            Gimnasio de Prueba
+                                        </label>
+                                        <div class="form-text">Período de prueba sin costo</div>
+                                    </div>
                                 </div>
-                                <div class="form-text mt-2">El gimnasio podrá acceder al sistema</div>
-                            </div>
-
-                            <div class="col-md-6 mb-4">
-                                <div class="form-check form-switch form-check-custom">
-                                    <input class="form-check-input" type="checkbox" name="esPrueba" id="esPrueba" />
-                                    <label class="form-check-label fw-semibold" for="esPrueba">
-                                        Período de Prueba
-                                    </label>
-                                </div>
-                                <div class="form-text mt-2">Marcar si está en período de prueba</div>
                             </div>
                         </div>
                     </div>
@@ -109,74 +113,101 @@
 </div>
 
 @section Scripts {
-    <script>
-    $(document).ready(function () {
-        // Toggle password visibility
-        $('#togglePassword').click(function () {
-            const passwordInput = $('#passwordGimnasio');
-            const icon = $('#togglePasswordIcon');
-            
-            if (passwordInput.attr('type') === 'password') {
-                passwordInput.attr('type', 'text');
-                icon.removeClass('bi-eye').addClass('bi-eye-slash');
-            } else {
-                passwordInput.attr('type', 'password');
-                icon.removeClass('bi-eye-slash').addClass('bi-eye');
+    <!-- Script actualizado -->
+<script>
+$(document).ready(function () {
+    // Toggle password visibility
+    $('#togglePassword').click(function () {
+        const passwordInput = $('#passwordGimnasio');
+        const icon = $('#togglePasswordIcon');
+        
+        if (passwordInput.attr('type') === 'password') {
+            passwordInput.attr('type', 'text');
+            icon.removeClass('bi-eye').addClass('bi-eye-slash');
+        } else {
+            passwordInput.attr('type', 'password');
+            icon.removeClass('bi-eye-slash').addClass('bi-eye');
+        }
+    });
+
+    // Form submission with AJAX
+    $('#createGimnasioForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const btn = $('#btnCrearGimnasio');
+        btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Creando...');
+        
+        // Obtener el tipo seleccionado
+        const tipoGimnasio = $('input[name="tipoGimnasio"]:checked').val();
+        
+        // Crear FormData con los valores correctos
+        const formData = {
+            NombreGimnasio: $('#nombreGimnasio').val(),
+            duenoGimnasio: $('#duenoGimnasio').val(),
+            telefono: $('#telefono').val(),
+            EmailGimnasio: $('#emailGimnasio').val(),
+            passwordGimnasio: $('#passwordGimnasio').val(),
+            isActive: tipoGimnasio === 'pago',
+            esPrueba: tipoGimnasio === 'prueba'
+        };
+        
+        $.ajax({
+            url: '/Gimnasios/Create',
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                toastr.success('Gimnasio creado exitosamente');
+                setTimeout(function() {
+                    window.location.href = '/Gimnasios';
+                }, 1000);
+            },
+            error: function(xhr) {
+                let message = 'Error al crear el gimnasio';
+                if (xhr.responseText) {
+                    message = xhr.responseText;
+                }
+                toastr.error(message);
+                btn.prop('disabled', false).html('<i class="bi bi-check-circle me-2"></i>Crear Gimnasio');
             }
         });
-
-        // Form submission with AJAX
-        $('#createGimnasioForm').on('submit', function(e) {
-            e.preventDefault();
-            
-            const btn = $('#btnCrearGimnasio');
-            btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Creando...');
-            
-            $.ajax({
-                url: '/Gimnasios/Create',
-                type: 'POST',
-                data: $(this).serialize(),
-                success: function(response) {
-                    toastr.success('Gimnasio creado exitosamente');
-                    setTimeout(function() {
-                        window.location.href = '/Gimnasios';
-                    }, 1000);
-                },
-                error: function(xhr) {
-                    let message = 'Error al crear el gimnasio';
-                    if (xhr.responseText) {
-                        message = xhr.responseText;
-                    }
-                    toastr.error(message);
-                    btn.prop('disabled', false).html('<i class="bi bi-check-circle me-2"></i>Crear Gimnasio');
-                }
-            });
-        });
     });
-    </script>
+});
+</script>
 
-    <style>
-        .required:after {
-            content: " *";
-            color: #dc3545;
-        }
+<style>
+.required:after {
+    content: " *";
+    color: #dc3545;
+}
 
-        .form-check-custom .form-check-input {
-            width: 2.75rem;
-            height: 1.5rem;
-        }
+.form-check {
+    padding: 1rem;
+    border: 2px solid #e4e6ef;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
 
-        .card {
-            border-radius: 0.75rem;
-        }
+.form-check:has(input:checked) {
+    border-color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.05);
+}
 
-        .form-control-lg {
-            border-radius: 0.5rem;
-        }
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
 
-        .btn-lg {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-        }
-    </style>
+.card {
+    border-radius: 0.75rem;
+}
+
+.form-control-lg {
+    border-radius: 0.5rem;
+}
+
+.btn-lg {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+}
+</style>
 }

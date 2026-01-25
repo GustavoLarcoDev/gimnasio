@@ -91,10 +91,23 @@ namespace Gimnasio.Controllers
 
         // POST: Gimnasios/Create
         [HttpPost]
-        public async Task<IActionResult> Create(string NombreGimnasio, string duenoGimnasio, string telefono, string? EmailGimnasio, string passwordGimnasio, bool isActive, bool? esPrueba)
+        public async Task<IActionResult> Create(string NombreGimnasio, string duenoGimnasio, string telefono, string EmailGimnasio, 
+                                                string passwordGimnasio, bool isActive, bool esPrueba)
         {
             try
             {
+                // Validación: No pueden ser ambos true o ambos false
+                if (isActive && esPrueba)
+                {
+                    return BadRequest("Un gimnasio no puede ser de pago y de prueba al mismo tiempo");
+                }
+
+                if (!isActive && !esPrueba)
+                {
+                    return BadRequest("Debe seleccionar si el gimnasio es de pago o de prueba");
+                }
+
+                // Validaciones existentes
                 if (string.IsNullOrWhiteSpace(EmailGimnasio))
                 {
                     return BadRequest("Correo del Gimnasio es necesario");
@@ -103,7 +116,7 @@ namespace Gimnasio.Controllers
                 bool existing = await _context.Gimnasios.AnyAsync(c => c.Email == EmailGimnasio);
                 if (existing)
                 {
-                    return BadRequest("Gimnasio con este email ya existe, por favor use otro email o contacte al administrador");
+                    return BadRequest("Gimnasio con este email ya existe");
                 }
 
                 if (string.IsNullOrWhiteSpace(NombreGimnasio))
@@ -118,14 +131,15 @@ namespace Gimnasio.Controllers
 
                 if (string.IsNullOrWhiteSpace(telefono))
                 {
-                    return BadRequest("Teléfono del Gimnasio o Dueño es necesario");
+                    return BadRequest("Teléfono es necesario");
                 }
 
                 if (string.IsNullOrWhiteSpace(passwordGimnasio))
                 {
-                    return BadRequest("Password del Gimnasio es necesario para las credenciales");
+                    return BadRequest("Password es necesario");
                 }
 
+                // Crear el gimnasio con la lógica correcta
                 var gimnasio = new Gym
                 {
                     GimnasioId = Guid.NewGuid(),
@@ -134,8 +148,8 @@ namespace Gimnasio.Controllers
                     Telefono = telefono,
                     Email = EmailGimnasio,
                     Password = passwordGimnasio,
-                    IsActive = isActive,
-                    EsPrueba = esPrueba ?? false,
+                    IsActive = isActive,      // true si es de pago, false si es prueba
+                    EsPrueba = esPrueba,      // true si es prueba, false si es de pago
                     FechaCreacion = DateTime.Now,
                     FechaDeActualizacion = DateTime.Now,
                 };
@@ -160,6 +174,17 @@ namespace Gimnasio.Controllers
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(new { success = false, message = "Datos inválidos" });
+                }
+
+                // Validación: No pueden ser ambos true o ambos false
+                if (gimnasio.IsActive && gimnasio.EsPrueba)
+                {
+                    return BadRequest(new { success = false, message = "Un gimnasio no puede ser de pago y de prueba al mismo tiempo" });
+                }
+
+                if (!gimnasio.IsActive && !gimnasio.EsPrueba)
+                {
+                    return BadRequest(new { success = false, message = "Debe seleccionar si el gimnasio es de pago o de prueba" });
                 }
 
                 var gimnasioExistente = await _context.Gimnasios.FindAsync(gimnasio.GimnasioId);
@@ -252,17 +277,36 @@ namespace Gimnasio.Controllers
                     return NotFound(new { success = false, message = "Gimnasio no encontrado" });
                 }
 
-                gimnasio.IsActive = !gimnasio.IsActive;
+                // LÓGICA CORRECTA: Toggle entre Activo/Pago y Prueba
+                // Si está activo (pago), cambiarlo a prueba
+                // Si está en prueba, cambiarlo a activo (pago)
+        
+                if (gimnasio.IsActive)
+                {
+                    // Era de pago (activo), ahora será de prueba
+                    gimnasio.IsActive = false;
+                    gimnasio.EsPrueba = true;
+                }
+                else
+                {
+                    // Era de prueba, ahora será de pago (activo)
+                    gimnasio.IsActive = true;
+                    gimnasio.EsPrueba = false;
+                }
+
                 gimnasio.FechaDeActualizacion = DateTime.Now;
 
                 _context.Update(gimnasio);
                 await _context.SaveChangesAsync();
 
+                string tipoActual = gimnasio.IsActive ? "Pago (Activo)" : "Prueba";
+        
                 return Ok(new 
                 { 
                     success = true, 
-                    message = $"Gimnasio {(gimnasio.IsActive ? "activado" : "desactivado")} exitosamente",
-                    isActive = gimnasio.IsActive
+                    message = $"Gimnasio cambiado a modo {tipoActual} exitosamente",
+                    isActive = gimnasio.IsActive,
+                    esPrueba = gimnasio.EsPrueba
                 });
             }
             catch (Exception ex)

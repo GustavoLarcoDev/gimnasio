@@ -154,7 +154,6 @@
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/scopedcss/Views/Shared/_Layout.cshtml.rz.scp.css
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/scopedcss/bundle/Gimnasio.styles.css
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/scopedcss/projectbundle/Gimnasio.bundle.scp.css
-/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/jplv4lxyvl-lugek5hnai.gz
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/z1ei26tok5-61n19gt1b8.gz
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/nhec7e8j4p-fr7q2aak1r.gz
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/oqiz0mlak6-bqjiyaj88i.gz
@@ -263,3 +262,4 @@
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/bin/Debug/net9.0/RBush.dll
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/bin/Debug/net9.0/SixLabors.Fonts.dll
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/bin/Debug/net9.0/System.IO.Packaging.dll
+/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/jplv4lxyvl-4jvr3jqhph.gz
