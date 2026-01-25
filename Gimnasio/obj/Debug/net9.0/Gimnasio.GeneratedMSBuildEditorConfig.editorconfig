@@ -42,6 +42,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvR2ltbmFzaW9zL0NyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/Views/Gimnasios/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvR2ltbmFzaW9zL0Rhc2hib2FyZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/Views/Gimnasios/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvR2ltbmFzaW9zL0xvZ2luLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -65,6 +73,10 @@ build_metadata.AdditionalFiles.CssScope =
 [/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/Views/Shared/_AuthLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19BdXRoTGF5b3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = b-f4hhhzuykz
 
 [/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s

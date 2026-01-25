@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClosedXML.Excel;
 using Gimnasio.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Gimnasio.Controllers
 {
@@ -20,7 +22,7 @@ namespace Gimnasio.Controllers
         {
             return View();
         }
-
+        
         // GET: Gimnasios/GetGimnasios
         [HttpGet]
         public async Task<IActionResult> GetGimnasios()
@@ -310,6 +312,159 @@ namespace Gimnasio.Controllers
                 });
             }
             catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
+        // GET: Gimnasios/Login
+        [HttpGet]
+        public IActionResult Login()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                // Si el usuario ya está autenticado, redirigir al Dashboard
+                var gimnasioIdClaim = User.Claims.FirstOrDefault(c => c.Type == "GimnasioId");
+                if (gimnasioIdClaim != null)
+                {
+                   return RedirectToAction("Dashboard", new { id = gimnasioIdClaim.Value });
+                }
+            }
+            return View();
+        }
+
+        // POST: Gimnasios/Login
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+            try 
+            {
+                if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+                {
+                    ViewBag.Error = "Email y contraseña son obligatorios";
+                    return View();
+                }
+
+                var gimnasio = await _context.Gimnasios
+                    .FirstOrDefaultAsync(g => g.Email == email && g.Password == password);
+
+                if (gimnasio == null)
+                {
+                    ViewBag.Error = "Credenciales inválidas";
+                    return View();
+                }
+
+                if (!gimnasio.IsActive && !gimnasio.EsPrueba) // Validación extra por si acaso
+                {
+                    ViewBag.Error = "Su cuenta no está activa. Contacte al administrador.";
+                    return View();
+                }
+
+                // Crear Claims
+                var claims = new List<System.Security.Claims.Claim>
+                {
+                    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, gimnasio.GimnasioNombre),
+                    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Email, gimnasio.Email),
+                    new System.Security.Claims.Claim("GimnasioId", gimnasio.GimnasioId.ToString())
+                };
+
+                var claimsIdentity = new System.Security.Claims.ClaimsIdentity(claims, Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
+                var authProperties = new Microsoft.AspNetCore.Authentication.AuthenticationProperties
+                {
+                    IsPersistent = true,
+                };
+
+                await HttpContext.SignInAsync(
+                    Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme,
+                    new System.Security.Claims.ClaimsPrincipal(claimsIdentity),
+                    authProperties);
+
+                return RedirectToAction("Dashboard", new { id = gimnasio.GimnasioId });
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Ocurrió un error al intentar iniciar sesión: " + ex.Message;
+                return View();
+            }
+        }
+
+        // GET: Gimnasios/Logout
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(
+                Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
+            
+            return RedirectToAction("Login");
+        }
+
+        // GET: Gimnasios/Dashboard/5
+        [Microsoft.AspNetCore.Authorization.Authorize]
+        [HttpGet("Gimnasios/{id}/Dashboard")]
+        public async Task<IActionResult> Dashboard(Guid id)
+        {
+            try
+            {
+                // Verificar que el usuario logueado sea el dueño del dashboard
+                var gimnasioIdClaim = User.Claims.FirstOrDefault(c => c.Type == "GimnasioId");
+                if (gimnasioIdClaim == null || gimnasioIdClaim.Value != id.ToString())
+                {
+                    return Forbid(); // O redirigir a Login/Home con mensaje de error
+                }
+
+                var gimnasio = await _context.Gimnasios
+                    .Include(g => g.Clientes)
+                    .FirstOrDefaultAsync(g => g.GimnasioId == id);
+
+                if (gimnasio == null)
+                {
+                    return NotFound();
+                }
+
+                return View(gimnasio);
+            }
+            catch (Exception ex)
+            {
+                 return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
+        // POST: Gimnasios/CreateClient
+        [Microsoft.AspNetCore.Authorization.Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CreateClient([FromForm] Cliente cliente)
+        {
+            try
+            {
+                // Verificar autorización
+                var gimnasioIdClaim = User.Claims.FirstOrDefault(c => c.Type == "GimnasioId");
+                if (gimnasioIdClaim == null || cliente.GimnasioId.ToString() != gimnasioIdClaim.Value)
+                {
+                     return Forbid();
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    // Si falla, podríamos retornar al Dashboard con errores, pero es una petición POST.
+                    // Idealmente esto se maneja con AJAX o retornando la vista Dashboard con el modelo inválido.
+                     return BadRequest(new { success = false, message = "Datos inválidos" });
+                }
+                
+                // Asegurar IDs
+                cliente.ClienteId = Guid.NewGuid();
+                cliente.FechaDeCreacion = DateTime.Now;
+                cliente.FechaDeActualizacion = DateTime.Now;
+                // FechaQueTermina se calcula base a Dias? Asumiremos que el usuario lo envía o se calcula aquí.
+                if (cliente.Dias > 0 && cliente.FechaQueTermina == default)
+                {
+                     cliente.FechaQueTermina = DateTime.Now.AddDays(cliente.Dias);
+                }
+
+                _context.Clientes.Add(cliente);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Dashboard", new { id = cliente.GimnasioId });
+            }
+             catch (Exception ex)
             {
                 return StatusCode(500, new { success = false, message = ex.Message });
             }

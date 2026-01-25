@@ -215,8 +215,6 @@
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/z2z27ehv8o-muycvpuwrr.gz
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/1ifazrby76-87fc7y1x7t.gz
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/qfz92nkus7-jfsiqqwiad.gz
-/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/vgyjxkqfbq-54s3wf1661.gz
-/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/gaf6ufp6t0-54s3wf1661.gz
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/staticwebassets.build.json
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/staticwebassets.build.json.cache
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/staticwebassets.development.json
@@ -263,3 +261,8 @@
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/bin/Debug/net9.0/SixLabors.Fonts.dll
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/bin/Debug/net9.0/System.IO.Packaging.dll
 /Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/jplv4lxyvl-4jvr3jqhph.gz
+/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/bin/Debug/net9.0/HttpContextExtensions.dll
+/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/Gimnasio.MvcApplicationPartsAssemblyInfo.cs
+/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/scopedcss/Views/Shared/_AuthLayout.cshtml.rz.scp.css
+/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/vgyjxkqfbq-bwl4pa3mpd.gz
+/Users/gustavolarco/RiderProjects/Gimnasio/Gimnasio/obj/Debug/net9.0/compressed/gaf6ufp6t0-bwl4pa3mpd.gz
